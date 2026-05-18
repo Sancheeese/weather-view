@@ -31,16 +31,17 @@
 
 /**
  * @param {string} city
+ * @param {{ signal?: AbortSignal }} [options]
  * @returns {Promise<WeatherSuccess>}
  */
-export async function fetchWeather(city) {
+export async function fetchWeather(city, options = {}) {
   const trimmed = city.trim();
   if (!trimmed) {
     throw new ApiError('请输入城市名称', 400);
   }
 
   const params = new URLSearchParams({ city: trimmed });
-  const response = await fetch(`/api/weather?${params}`);
+  const response = await fetch(`/api/weather?${params}`, { signal: options.signal });
 
   let body;
   try {

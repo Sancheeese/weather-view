@@ -42,7 +42,7 @@ async function handleSearch(city) {
   showLoading(trimmed);
 
   try {
-    const result = await fetchWeather(trimmed);
+    const result = await fetchWeather(trimmed, { signal: activeController.signal });
     showWeather(result.data);
   } catch (error) {
     if (error.name === 'AbortError') return;

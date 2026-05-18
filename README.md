@@ -31,7 +31,7 @@ npm start
 
 ```bash
 curl http://localhost:3001/health
-curl "http://localhost:3001/api/weather?city=北京"
+curl --get "http://localhost:3001/api/weather" --data-urlencode "city=北京"
 ```
 
 ### 2. 启动前端
