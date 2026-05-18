@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>天气查询</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles/main.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="app-header">
+        <h1 class="app-title">天气查询</h1>
+        <p class="app-subtitle">输入城市名称，查看实时天气</p>
+      </header>
+
+      <form class="search-form" id="search-form" autocomplete="off">
+        <div class="search-field">
+          <input
+            type="text"
+            id="city-input"
+            class="search-input"
+            placeholder="例如：北京、Shanghai"
+            aria-label="城市名称"
+          />
+          <button type="submit" class="search-btn" id="search-btn">查询</button>
+        </div>
+      </form>
+
+      <main class="weather-panel" id="weather-panel" aria-live="polite"></main>
+
+      <footer class="app-footer">
+        <p>数据来源 Open-Meteo · 仅供学习演示</p>
+      </footer>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
