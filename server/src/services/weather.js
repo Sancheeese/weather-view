@@ -1,7 +1,10 @@
+const { pinyin } = require('pinyin-pro');
 const { getWeatherDescription } = require('./weatherCodes');
 
 const GEOCODING_URL = 'https://geocoding-api.open-meteo.com/v1/search';
 const FORECAST_URL = 'https://api.open-meteo.com/v1/forecast';
+
+const ADMIN_SUFFIXES = ['市', '省', '县', '区', '州', '盟', '地区', '自治区', '特别行政区'];
 
 async function fetchJson(url) {
   const response = await fetch(url);
@@ -17,20 +20,58 @@ function hasCjkCharacters(text) {
   return /[\u4e00-\u9fff]/.test(text);
 }
 
-async function geocodeCity(city) {
-  const attempts = [{ name: city, count: '1' }];
-  if (hasCjkCharacters(city)) {
-    attempts.push({ name: city, count: '1', language: 'zh' });
+function hasAdminSuffix(name) {
+  return ADMIN_SUFFIXES.some((suffix) => name.endsWith(suffix));
+}
+
+function toPinyinQuery(city) {
+  return pinyin(city, { toneType: 'none', separator: '' });
+}
+
+async function searchGeocode(query) {
+  const params = new URLSearchParams(query);
+  const data = await fetchJson(`${GEOCODING_URL}?${params}`);
+  return data.results?.[0] ?? null;
+}
+
+function buildGeocodeAttempts(city) {
+  const attempts = [];
+  const seen = new Set();
+
+  function add(query) {
+    const key = JSON.stringify(query);
+    if (seen.has(key)) return;
+    seen.add(key);
+    attempts.push(query);
   }
 
-  for (const query of attempts) {
-    const params = new URLSearchParams(query);
-    const data = await fetchJson(`${GEOCODING_URL}?${params}`);
-    if (data.results?.length > 0) {
-      return data.results[0];
+  if (hasCjkCharacters(city)) {
+    add({ name: city, count: '1', language: 'zh' });
+
+    if (!hasAdminSuffix(city)) {
+      for (const suffix of ['市', '州']) {
+        add({ name: city + suffix, count: '1', language: 'zh' });
+      }
+    }
+
+    const romanized = toPinyinQuery(city);
+    if (romanized && romanized !== city) {
+      add({ name: romanized, count: '1' });
+    }
+  } else {
+    add({ name: city, count: '1' });
+  }
+
+  return attempts;
+}
+
+async function geocodeCity(city) {
+  for (const query of buildGeocodeAttempts(city)) {
+    const result = await searchGeocode(query);
+    if (result) {
+      return result;
     }
   }
-
   return null;
 }
 
