@@ -117,6 +117,8 @@ export function showWeather(data) {
 
       ${renderSuggestions(data.suggestions)}
 
+      ${renderAttractions(data.attractions)}
+
       <footer class="weather-updated">
         <time datetime="${escapeHtml(data.fetchedAt)}">更新于 ${updatedAt}</time>
       </footer>
@@ -152,6 +154,41 @@ function renderSuggestions(suggestions) {
     <section class="weather-suggestions" aria-label="生活建议">
       <h2 class="suggestions-heading">生活建议</h2>
       ${sections}
+    </section>
+  `;
+}
+
+/**
+ * @param {import('./api.js').WeatherData['attractions']} attractions
+ */
+function renderAttractions(attractions) {
+  if (!attractions?.length) return '';
+
+  const items = attractions
+    .map((spot) => {
+      const tags = spot.tags?.length
+        ? `<ul class="attraction-tags" aria-label="标签">${spot.tags
+            .map((tag) => `<li class="attraction-tag">${escapeHtml(tag)}</li>`)
+            .join('')}</ul>`
+        : '';
+      const description = spot.description
+        ? `<p class="attraction-desc">${escapeHtml(spot.description)}</p>`
+        : '';
+
+      return `
+        <article class="attraction-item">
+          <h3 class="attraction-name">${escapeHtml(spot.name)}</h3>
+          ${description}
+          ${tags}
+        </article>
+      `;
+    })
+    .join('');
+
+  return `
+    <section class="weather-attractions" aria-label="推荐景点">
+      <h2 class="attractions-heading">推荐景点</h2>
+      <div class="attraction-list">${items}</div>
     </section>
   `;
 }
