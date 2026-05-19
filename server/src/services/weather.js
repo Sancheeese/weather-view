@@ -1,6 +1,7 @@
 const { pinyin } = require('pinyin-pro');
 const { getWeatherDescription } = require('./weatherCodes');
 const { getSuggestions } = require('./suggestions');
+const { getAttractions } = require('./attractions');
 
 const GEOCODING_URL = 'https://geocoding-api.open-meteo.com/v1/search';
 const FORECAST_URL = 'https://api.open-meteo.com/v1/forecast';
@@ -112,6 +113,7 @@ async function getWeatherByCity(city) {
     data: {
       ...weather,
       suggestions: getSuggestions(weather),
+      attractions: getAttractions(location.name),
     },
   };
 }

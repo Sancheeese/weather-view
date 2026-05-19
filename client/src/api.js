@@ -11,6 +11,13 @@
  */
 
 /**
+ * @typedef {Object} WeatherAttraction
+ * @property {string} name
+ * @property {string} [description]
+ * @property {string[]} [tags]
+ */
+
+/**
  * @typedef {Object} WeatherData
  * @property {string} city
  * @property {string} country
@@ -23,6 +30,7 @@
  * @property {string} weatherDescription
  * @property {string} fetchedAt
  * @property {WeatherSuggestion[]} [suggestions]
+ * @property {WeatherAttraction[]} [attractions]
  */
 
 /**
