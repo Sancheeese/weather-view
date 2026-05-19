@@ -52,7 +52,7 @@ npm run dev
 
 1. 在浏览器打开 http://localhost:5173
 2. 输入城市名（支持中文如「北京」或英文如「Shanghai」）
-3. 点击「查询」或按回车，查看温度、湿度、风速与天气描述
+3. 点击「查询」或按回车，查看温度、湿度、风速、天气描述与生活建议（穿衣、出行、体感）
 
 ## API 契约
 
@@ -70,10 +70,29 @@ npm run dev
     "humidity": 45,
     "windSpeed": 12.3,
     "weatherDescription": "Mainly clear",
-    "fetchedAt": "2026-05-18T12:00:00.000Z"
+    "fetchedAt": "2026-05-18T12:00:00.000Z",
+    "suggestions": [
+      {
+        "category": "clothing",
+        "label": "穿衣",
+        "tips": ["长袖衬衫或薄针织", "早晚备一件薄外套", "适合单层或两层穿搭"]
+      },
+      {
+        "category": "travel",
+        "label": "出行",
+        "tips": ["天气较好，适合散步或短途出行"]
+      },
+      {
+        "category": "comfort",
+        "label": "体感",
+        "tips": ["温湿度较舒适，保持日常作息即可"]
+      }
+    ]
   }
 }
 ```
+
+生活建议由后端规则引擎根据温度、湿度、风速与天气代码生成（当前写死在代码中，后续可接入大模型）。
 
 ## 生产构建（可选）
 

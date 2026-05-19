@@ -4,6 +4,13 @@
  */
 
 /**
+ * @typedef {Object} WeatherSuggestion
+ * @property {string} category
+ * @property {string} label
+ * @property {string[]} tips
+ */
+
+/**
  * @typedef {Object} WeatherData
  * @property {string} city
  * @property {string} country
@@ -15,6 +22,7 @@
  * @property {number} weatherCode
  * @property {string} weatherDescription
  * @property {string} fetchedAt
+ * @property {WeatherSuggestion[]} [suggestions]
  */
 
 /**

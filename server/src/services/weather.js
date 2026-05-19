@@ -1,5 +1,6 @@
 const { pinyin } = require('pinyin-pro');
 const { getWeatherDescription } = require('./weatherCodes');
+const { getSuggestions } = require('./suggestions');
 
 const GEOCODING_URL = 'https://geocoding-api.open-meteo.com/v1/search';
 const FORECAST_URL = 'https://api.open-meteo.com/v1/forecast';
@@ -94,18 +95,23 @@ async function getWeatherByCity(city) {
   const forecast = await fetchForecast(location.latitude, location.longitude);
   const current = forecast.current;
 
+  const weather = {
+    city: location.name,
+    country: location.country || location.country_code || '',
+    latitude: location.latitude,
+    longitude: location.longitude,
+    temperature: current.temperature_2m,
+    humidity: current.relative_humidity_2m,
+    windSpeed: current.wind_speed_10m,
+    weatherCode: current.weather_code,
+    weatherDescription: getWeatherDescription(current.weather_code),
+    fetchedAt: new Date().toISOString(),
+  };
+
   return {
     data: {
-      city: location.name,
-      country: location.country || location.country_code || '',
-      latitude: location.latitude,
-      longitude: location.longitude,
-      temperature: current.temperature_2m,
-      humidity: current.relative_humidity_2m,
-      windSpeed: current.wind_speed_10m,
-      weatherCode: current.weather_code,
-      weatherDescription: getWeatherDescription(current.weather_code),
-      fetchedAt: new Date().toISOString(),
+      ...weather,
+      suggestions: getSuggestions(weather),
     },
   };
 }

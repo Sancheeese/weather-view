@@ -293,6 +293,58 @@ body {
   font-weight: 500;
 }
 
+.weather-suggestions {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--card-border);
+}
+
+.suggestions-heading {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.suggestion-group + .suggestion-group {
+  margin-top: 1rem;
+}
+
+.suggestion-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.45rem;
+}
+
+.suggestion-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.suggestion-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-left: 0.15rem;
+}
+
+.suggestion-list li {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  padding-left: 1rem;
+  position: relative;
+}
+
+.suggestion-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
 .weather-updated {
   margin-top: 1.25rem;
   text-align: center;

@@ -23,6 +23,12 @@ const WEATHER_EMOJI = {
   95: '⛈️',
 };
 
+const SUGGESTION_ICONS = {
+  clothing: '👕',
+  travel: '🚶',
+  comfort: '💧',
+};
+
 const DESCRIPTION_ZH = {
   'Clear sky': '晴朗',
   'Mainly clear': '大部晴朗',
@@ -109,10 +115,44 @@ export function showWeather(data) {
         </li>
       </ul>
 
+      ${renderSuggestions(data.suggestions)}
+
       <footer class="weather-updated">
         <time datetime="${escapeHtml(data.fetchedAt)}">更新于 ${updatedAt}</time>
       </footer>
     </article>
+  `;
+}
+
+/**
+ * @param {import('./api.js').WeatherData['suggestions']} suggestions
+ */
+function renderSuggestions(suggestions) {
+  if (!suggestions?.length) return '';
+
+  const sections = suggestions
+    .map((group) => {
+      const icon = SUGGESTION_ICONS[group.category] ?? '💡';
+      const items = group.tips
+        .map((tip) => `<li>${escapeHtml(tip)}</li>`)
+        .join('');
+      return `
+        <section class="suggestion-group">
+          <h3 class="suggestion-title">
+            <span class="suggestion-icon" aria-hidden="true">${icon}</span>
+            ${escapeHtml(group.label)}
+          </h3>
+          <ul class="suggestion-list">${items}</ul>
+        </section>
+      `;
+    })
+    .join('');
+
+  return `
+    <section class="weather-suggestions" aria-label="生活建议">
+      <h2 class="suggestions-heading">生活建议</h2>
+      ${sections}
+    </section>
   `;
 }
 
